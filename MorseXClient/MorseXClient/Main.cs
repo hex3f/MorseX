@@ -100,7 +100,6 @@ namespace MorseXClient
             }
             catch (Exception)
             {
-
                 Disconnect();
             }
         }
@@ -142,12 +141,17 @@ namespace MorseXClient
         private void UpdateServerStatus() {
             while (true)
             {
+                Socket socketTest = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                int port = PortText.Text != "" ? Convert.ToInt32(PortText.Text) : 45454;
+                IPAddress addr = IPAddress.Parse(ipadr.ToString());
+                IPEndPoint endp = new IPEndPoint(addr, port);
+                //socketTest.Bind(endp);
                 if (clientSocket != null && IsConnected(clientSocket) &&/*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead) && clientSocket.Connected)
                 {
                     isRotaryConnectOK = true;
                     Status.Invalidate();
                 }
-                else if(clientSocket != null)
+                else if (socketTest != null)
                 {
                     Disconnect();
                 }
@@ -197,11 +201,11 @@ namespace MorseXClient
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (clientSocket == null || !clientSocket.Connected) {
-                ConnectServre();
+                ConnectServer();
             }
         }
 
-        private void ConnectServre() {
+        private void ConnectServer() {
             if (clientSocket == null || !clientSocket.Connected)
             {
                 try
@@ -460,8 +464,7 @@ namespace MorseXClient
             }
             catch
             {
-
-                Disconnect();
+                throw;
             }
         }
 

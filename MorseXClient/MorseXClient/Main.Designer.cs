@@ -50,9 +50,11 @@
             this.label5 = new System.Windows.Forms.Label();
             this.Menu = new System.Windows.Forms.MenuStrip();
             this.toolsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearParseLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearMessageLogToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openNewParseLogWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openNewMorseLogWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openNewMessageLogWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.translatorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -73,8 +75,6 @@
             this.BtnSendAllMode = new System.Windows.Forms.RadioButton();
             this.BtnSendRepeatMode = new System.Windows.Forms.RadioButton();
             this.BtnSendOneByOneMode = new System.Windows.Forms.RadioButton();
-            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openNewParseLogWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -340,6 +340,13 @@
             this.toolsToolStripMenuItem.Size = new System.Drawing.Size(52, 21);
             this.toolsToolStripMenuItem.Text = "Tools";
             // 
+            // clearAllToolStripMenuItem
+            // 
+            this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.clearAllToolStripMenuItem.Text = "Clear All";
+            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
+            // 
             // clearParseLogToolStripMenuItem
             // 
             this.clearParseLogToolStripMenuItem.Name = "clearParseLogToolStripMenuItem";
@@ -360,6 +367,13 @@
             this.clearMessageLogToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
             this.clearMessageLogToolStripMenuItem.Text = "Clear Message Log";
             this.clearMessageLogToolStripMenuItem.Click += new System.EventHandler(this.clearMessageLogToolStripMenuItem_Click);
+            // 
+            // openNewParseLogWindowToolStripMenuItem
+            // 
+            this.openNewParseLogWindowToolStripMenuItem.Name = "openNewParseLogWindowToolStripMenuItem";
+            this.openNewParseLogWindowToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.openNewParseLogWindowToolStripMenuItem.Text = "Open New Parse Log Window";
+            this.openNewParseLogWindowToolStripMenuItem.Click += new System.EventHandler(this.openNewParseLogWindowToolStripMenuItem_Click);
             // 
             // openNewMorseLogWindowToolStripMenuItem
             // 
@@ -599,20 +613,6 @@
             this.BtnSendOneByOneMode.UseVisualStyleBackColor = true;
             this.BtnSendOneByOneMode.CheckedChanged += new System.EventHandler(this.BtnSendOneByOneMode_CheckedChanged);
             // 
-            // clearAllToolStripMenuItem
-            // 
-            this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
-            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
-            this.clearAllToolStripMenuItem.Text = "Clear All";
-            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
-            // 
-            // openNewParseLogWindowToolStripMenuItem
-            // 
-            this.openNewParseLogWindowToolStripMenuItem.Name = "openNewParseLogWindowToolStripMenuItem";
-            this.openNewParseLogWindowToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
-            this.openNewParseLogWindowToolStripMenuItem.Text = "Open New Parse Log Window";
-            this.openNewParseLogWindowToolStripMenuItem.Click += new System.EventHandler(this.openNewParseLogWindowToolStripMenuItem_Click);
-            // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -622,7 +622,7 @@
             this.Controls.Add(this.Status);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.Menu);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
+            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.Menu;
             this.Margin = new System.Windows.Forms.Padding(2);
             this.MaximizeBox = false;

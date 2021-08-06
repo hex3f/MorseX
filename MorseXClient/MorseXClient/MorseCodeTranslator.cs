@@ -36,6 +36,33 @@ namespace MorseXClient
             { 'Y',"-.--" },
             { 'Z',"--.." },
 
+            { 'a',".-" },
+            { 'b',"-..." },
+            { 'c',"-.-." },
+            { 'd',"-.." },
+            { 'e',"." },
+            { 'f',"..-." },
+            { 'g',"--." },
+            { 'h',"...." },
+            { 'i',".." },
+            { 'j',".---" },
+            { 'k',"-.-" },
+            { 'l',".-.." },
+            { 'm',"--" },
+            { 'n',"-." },
+            { 'o',"---" },
+            { 'p',".--." },
+            { 'q',"--.-" },
+            { 'r',".-." },
+            { 's',"..." },
+            { 't',"-" },
+            { 'u',"..-" },
+            { 'v',"...-" },
+            { 'w',".--" },
+            { 'x',"-..-" },
+            { 'y',"-.--" },
+            { 'z',"--.." },
+
             // Numbers
             { '0',"-----" },
             { '1',".----" },
@@ -68,17 +95,6 @@ namespace MorseXClient
             { '(',"-.--." }, // Left bracket
             { ')',"-.--.-" }, // right bracket         
         };
-
-        public static void getUserInput()
-        {
-            string input;
-            Console.WriteLine("What did you want to say?");
-            input = Console.ReadLine();
-            input = input.ToLower();
-            Console.WriteLine("Your output is: " + translate(input));
-            Console.WriteLine("Press enter to end.");
-            Console.ReadLine();
-        }
 
         public static string translate(string input)
         {
