@@ -81,6 +81,16 @@
             ParseMorseStr += "-";
         }
 
+        public void PlayDash()
+        {
+            dashSound.Play();
+        }
+
+        public void PlayDot()
+        {
+            dotSound.Play();
+        }
+
         public void PlayMorseTone(string morseStringOrSentence)
         {
             if (morseStringOrSentence == "ERROR DATA") {
@@ -132,12 +142,16 @@
                     switch (character)
                     {
                         case '.':
-                            dotSound.Play();
+                            //dotSound.Play();
+                            Thread dot = new Thread(new ThreadStart(PlayDot));
+                            dot.Start();
                             Task dotTask = Task.Run(ShowDot);
                             dotTask.Wait();
                             break;
                         case '-':
-                            dashSound.Play();
+                            //dashSound.Play();
+                            Thread dash = new Thread(new ThreadStart(PlayDash));
+                            dash.Start();
                             Task dashTask = Task.Run(ShowDash);
                             dashTask.Wait();
                             break;

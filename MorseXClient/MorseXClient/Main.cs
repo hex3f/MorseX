@@ -68,32 +68,40 @@ namespace MorseXClient
         /// <param name="key">加密Key</param>
         private void SendMessage(string message, string key)
         {
-            if (string.IsNullOrWhiteSpace(message.Trim())) return;
-            if (clientSocket != null && clientSocket.Connected && IsConnected(clientSocket))
+            try
             {
-                if (!check.CheckMessage(message)) return;
-                switch (sendMode)
+                if (string.IsNullOrWhiteSpace(message.Trim())) return;
+                if (clientSocket != null && clientSocket.Connected && IsConnected(clientSocket))
                 {
-                    case SendMode.OneByOneMode:
-                        Thread OneByOneModeThread = new Thread(delegate () { SendMorseMessage(message, key); });
-                        OneByOneModeThread.Start();
-                        break;
-                    case SendMode.RepeatMode:
-                        Thread RepeatModeThread = new Thread(delegate () { SendMorseMessageRepeat(message, key); });
-                        RepeatModeThread.Start();
-                        break;
-                    case SendMode.AllMode:
-                        string EncryptAllModeMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(message), key);
-                        SendMorse(EncryptAllModeMessage);
-                        break;
-                    default:
-                        break;
+                    if (!check.CheckMessage(message)) return;
+                    switch (sendMode)
+                    {
+                        case SendMode.OneByOneMode:
+                            Thread OneByOneModeThread = new Thread(delegate () { SendMorseMessage(message, key); });
+                            OneByOneModeThread.Start();
+                            break;
+                        case SendMode.RepeatMode:
+                            Thread RepeatModeThread = new Thread(delegate () { SendMorseMessageRepeat(message, key); });
+                            RepeatModeThread.Start();
+                            break;
+                        case SendMode.AllMode:
+                            string EncryptAllModeMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(message), key);
+                            SendMorse(EncryptAllModeMessage);
+                            break;
+                        default:
+                            break;
+                    }
+                }
+                else
+                {
+                    MessageBox.Show("Please connect server");
+                    return;
                 }
             }
-            else
+            catch (Exception)
             {
-                MessageBox.Show("Please connect server");
-                return;
+
+                Disconnect();
             }
         }
 
@@ -442,10 +450,18 @@ namespace MorseXClient
         /// </summary>
         /// <param name="message"></param>
         private void SendMorse(string message) {
-            if (clientSocket != null && clientSocket.Connected)
+            try
             {
-                Byte[] bytesSend = Encoding.UTF8.GetBytes(message + "$");
-                clientSocket.Send(bytesSend);
+                if (clientSocket != null && clientSocket.Connected)
+                {
+                    Byte[] bytesSend = Encoding.UTF8.GetBytes(message + "$");
+                    clientSocket.Send(bytesSend);
+                }
+            }
+            catch
+            {
+
+                Disconnect();
             }
         }
 

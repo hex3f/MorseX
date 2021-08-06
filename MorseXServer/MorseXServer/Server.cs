@@ -537,7 +537,11 @@ namespace MorseXServer
             }
             foreach (var item in clientList)
             {
-                Socket brdcastSocket = (Socket)item.Value;
+                Socket brdcastSocket = item.Value;
+                if (brdcastSocket!= null && brdcastSocket.Connected)
+                {
+
+                }
                 string msgTemp = null;
                 Byte[] castBytes = new Byte[4096];
                 if (flag == true)
