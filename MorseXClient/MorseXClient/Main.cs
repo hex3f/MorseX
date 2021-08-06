@@ -146,12 +146,12 @@ namespace MorseXClient
                 IPAddress addr = IPAddress.Parse(ipadr.ToString());
                 IPEndPoint endp = new IPEndPoint(addr, port);
                 //socketTest.Bind(endp);
-                if (clientSocket != null && IsConnected(clientSocket) &&/*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead) && clientSocket.Connected)
+                if (clientSocket != null && IsConnected(clientSocket) &&/*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead))
                 {
                     isRotaryConnectOK = true;
                     Status.Invalidate();
                 }
-                else if (socketTest != null)
+                else if (clientSocket != null)
                 {
                     Disconnect();
                 }
