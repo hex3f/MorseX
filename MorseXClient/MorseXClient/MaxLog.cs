@@ -13,6 +13,7 @@ namespace MorseXClient
     enum WindowType {
         Log,
         Morse,
+        Parse,
     }
     public partial class LogWindow : Form
     {
@@ -21,14 +22,6 @@ namespace MorseXClient
         public LogWindow()
         {
             InitializeComponent();
-        }
-
-        private void MorseText_TextChanged(object sender, EventArgs e)
-        {
-            //文本框选中的起始点在最后
-            LogWindowText.SelectionStart = LogWindowText.TextLength;
-            //将控件内容滚动到当前插入符号位置
-            LogWindowText.ScrollToCaret();
         }
 
         private void LogWindow_FormClosing(object sender, FormClosingEventArgs e)
@@ -41,9 +34,20 @@ namespace MorseXClient
                 case WindowType.Morse:
                     Main.MorseValueList.Remove(this);
                     break;
+                case WindowType.Parse:
+                    //Main.MorseValueList.Remove(this);
+                    break;
                 default:
                     break;
             }
+        }
+
+        private void LogWindowText_TextChanged(object sender, EventArgs e)
+        {
+            //文本框选中的起始点在最后
+            LogWindowText.SelectionStart = LogWindowText.TextLength;
+            //将控件内容滚动到当前插入符号位置
+            LogWindowText.ScrollToCaret();
         }
     }
 }

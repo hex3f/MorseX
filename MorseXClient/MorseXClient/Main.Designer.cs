@@ -65,6 +65,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label12 = new System.Windows.Forms.Label();
             this.SoundVolume = new System.Windows.Forms.TrackBar();
             this.label10 = new System.Windows.Forms.Label();
             this.RepeatCountText = new System.Windows.Forms.TextBox();
@@ -72,7 +73,8 @@
             this.BtnSendAllMode = new System.Windows.Forms.RadioButton();
             this.BtnSendRepeatMode = new System.Windows.Forms.RadioButton();
             this.BtnSendOneByOneMode = new System.Windows.Forms.RadioButton();
-            this.label12 = new System.Windows.Forms.Label();
+            this.clearAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openNewParseLogWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.Menu.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
@@ -101,12 +103,12 @@
             this.keyText.Multiline = true;
             this.keyText.Name = "keyText";
             this.keyText.ShortcutsEnabled = false;
-            this.keyText.Size = new System.Drawing.Size(134, 51);
+            this.keyText.Size = new System.Drawing.Size(198, 51);
             this.keyText.TabIndex = 1;
             // 
             // BtnConnect
             // 
-            this.BtnConnect.Location = new System.Drawing.Point(360, 23);
+            this.BtnConnect.Location = new System.Drawing.Point(285, 16);
             this.BtnConnect.Margin = new System.Windows.Forms.Padding(2);
             this.BtnConnect.Name = "BtnConnect";
             this.BtnConnect.Size = new System.Drawing.Size(74, 24);
@@ -132,7 +134,7 @@
             // 
             this.SendText.AcceptsReturn = true;
             this.SendText.Font = new System.Drawing.Font("黑体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.SendText.Location = new System.Drawing.Point(5, 169);
+            this.SendText.Location = new System.Drawing.Point(5, 192);
             this.SendText.Margin = new System.Windows.Forms.Padding(2);
             this.SendText.Name = "SendText";
             this.SendText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
@@ -145,10 +147,10 @@
             // BtnSend
             // 
             this.BtnSend.Enabled = false;
-            this.BtnSend.Location = new System.Drawing.Point(358, 210);
+            this.BtnSend.Location = new System.Drawing.Point(358, 222);
             this.BtnSend.Margin = new System.Windows.Forms.Padding(2);
             this.BtnSend.Name = "BtnSend";
-            this.BtnSend.Size = new System.Drawing.Size(79, 28);
+            this.BtnSend.Size = new System.Drawing.Size(79, 27);
             this.BtnSend.TabIndex = 5;
             this.BtnSend.Text = "Send";
             this.BtnSend.UseVisualStyleBackColor = true;
@@ -158,7 +160,7 @@
             // 
             this.labelIP.AutoSize = true;
             this.labelIP.Font = new System.Drawing.Font("宋体", 10F);
-            this.labelIP.Location = new System.Drawing.Point(205, 9);
+            this.labelIP.Location = new System.Drawing.Point(266, 9);
             this.labelIP.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.labelIP.Name = "labelIP";
             this.labelIP.Size = new System.Drawing.Size(28, 14);
@@ -169,18 +171,18 @@
             // IpText
             // 
             this.IpText.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.IpText.Location = new System.Drawing.Point(205, 25);
+            this.IpText.Location = new System.Drawing.Point(269, 25);
             this.IpText.Margin = new System.Windows.Forms.Padding(2);
             this.IpText.MaxLength = 50;
             this.IpText.Name = "IpText";
-            this.IpText.Size = new System.Drawing.Size(151, 23);
+            this.IpText.Size = new System.Drawing.Size(168, 23);
             this.IpText.TabIndex = 7;
             this.IpText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IpText_KeyPress);
             // 
             // BtnDisconnect
             // 
             this.BtnDisconnect.Enabled = false;
-            this.BtnDisconnect.Location = new System.Drawing.Point(360, 51);
+            this.BtnDisconnect.Location = new System.Drawing.Point(363, 15);
             this.BtnDisconnect.Margin = new System.Windows.Forms.Padding(2);
             this.BtnDisconnect.Name = "BtnDisconnect";
             this.BtnDisconnect.Size = new System.Drawing.Size(74, 25);
@@ -192,7 +194,7 @@
             // MorseText
             // 
             this.MorseText.Font = new System.Drawing.Font("黑体", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.MorseText.Location = new System.Drawing.Point(5, 21);
+            this.MorseText.Location = new System.Drawing.Point(5, 44);
             this.MorseText.Margin = new System.Windows.Forms.Padding(2);
             this.MorseText.Multiline = true;
             this.MorseText.Name = "MorseText";
@@ -223,7 +225,7 @@
             // 
             // BtnCopyKey
             // 
-            this.BtnCopyKey.Location = new System.Drawing.Point(146, 24);
+            this.BtnCopyKey.Location = new System.Drawing.Point(210, 24);
             this.BtnCopyKey.Margin = new System.Windows.Forms.Padding(2);
             this.BtnCopyKey.Name = "BtnCopyKey";
             this.BtnCopyKey.Size = new System.Drawing.Size(52, 24);
@@ -245,7 +247,7 @@
             // 
             // BtnPasteKey
             // 
-            this.BtnPasteKey.Location = new System.Drawing.Point(146, 52);
+            this.BtnPasteKey.Location = new System.Drawing.Point(210, 51);
             this.BtnPasteKey.Margin = new System.Windows.Forms.Padding(2);
             this.BtnPasteKey.Name = "BtnPasteKey";
             this.BtnPasteKey.Size = new System.Drawing.Size(52, 24);
@@ -257,11 +259,11 @@
             // PortText
             // 
             this.PortText.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.PortText.Location = new System.Drawing.Point(251, 51);
+            this.PortText.Location = new System.Drawing.Point(312, 51);
             this.PortText.Margin = new System.Windows.Forms.Padding(2);
             this.PortText.MaxLength = 5;
             this.PortText.Name = "PortText";
-            this.PortText.Size = new System.Drawing.Size(105, 23);
+            this.PortText.Size = new System.Drawing.Size(125, 23);
             this.PortText.TabIndex = 19;
             this.PortText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.PortText_KeyPress);
             // 
@@ -269,7 +271,7 @@
             // 
             this.label3.AutoSize = true;
             this.label3.Font = new System.Drawing.Font("宋体", 10F);
-            this.label3.Location = new System.Drawing.Point(205, 56);
+            this.label3.Location = new System.Drawing.Point(266, 54);
             this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(42, 14);
@@ -284,7 +286,7 @@
             this.DelayText.Margin = new System.Windows.Forms.Padding(2);
             this.DelayText.MaxLength = 10;
             this.DelayText.Name = "DelayText";
-            this.DelayText.Size = new System.Drawing.Size(68, 23);
+            this.DelayText.Size = new System.Drawing.Size(90, 23);
             this.DelayText.TabIndex = 21;
             this.DelayText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.IntervalText_KeyPress);
             // 
@@ -304,7 +306,7 @@
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("宋体", 10F);
-            this.label5.Location = new System.Drawing.Point(83, 158);
+            this.label5.Location = new System.Drawing.Point(105, 158);
             this.label5.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(21, 14);
@@ -318,16 +320,19 @@
             this.toolsToolStripMenuItem});
             this.Menu.Location = new System.Drawing.Point(0, 0);
             this.Menu.Name = "Menu";
-            this.Menu.Size = new System.Drawing.Size(473, 25);
+            this.Menu.Size = new System.Drawing.Size(471, 25);
             this.Menu.TabIndex = 24;
             this.Menu.Text = "menuStrip1";
             // 
             // toolsToolStripMenuItem
             // 
+            this.toolsToolStripMenuItem.BackColor = System.Drawing.SystemColors.ActiveBorder;
             this.toolsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.clearAllToolStripMenuItem,
             this.clearParseLogToolStripMenuItem,
             this.clearToolStripMenuItem,
             this.clearMessageLogToolStripMenuItem,
+            this.openNewParseLogWindowToolStripMenuItem,
             this.openNewMorseLogWindowToolStripMenuItem,
             this.openNewMessageLogWindowToolStripMenuItem,
             this.translatorToolStripMenuItem});
@@ -418,14 +423,14 @@
             this.IntervalText.Margin = new System.Windows.Forms.Padding(2);
             this.IntervalText.MaxLength = 10;
             this.IntervalText.Name = "IntervalText";
-            this.IntervalText.Size = new System.Drawing.Size(68, 23);
+            this.IntervalText.Size = new System.Drawing.Size(88, 23);
             this.IntervalText.TabIndex = 28;
             // 
             // label8
             // 
             this.label8.AutoSize = true;
             this.label8.Font = new System.Drawing.Font("宋体", 10F);
-            this.label8.Location = new System.Drawing.Point(85, 117);
+            this.label8.Location = new System.Drawing.Point(105, 117);
             this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(21, 14);
@@ -449,6 +454,8 @@
             this.tabPage1.Controls.Add(this.LogText);
             this.tabPage1.Controls.Add(this.SendText);
             this.tabPage1.Controls.Add(this.BtnSend);
+            this.tabPage1.Controls.Add(this.BtnDisconnect);
+            this.tabPage1.Controls.Add(this.BtnConnect);
             this.tabPage1.Controls.Add(this.MorseText);
             this.tabPage1.Controls.Add(this.label1);
             this.tabPage1.Controls.Add(this.ParseText);
@@ -465,7 +472,7 @@
             // 
             this.label9.AutoSize = true;
             this.label9.Font = new System.Drawing.Font("黑体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.label9.Location = new System.Drawing.Point(6, 3);
+            this.label9.Location = new System.Drawing.Point(6, 26);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(56, 16);
             this.label9.TabIndex = 31;
@@ -481,7 +488,6 @@
             this.tabPage2.Controls.Add(this.BtnSendAllMode);
             this.tabPage2.Controls.Add(this.BtnSendRepeatMode);
             this.tabPage2.Controls.Add(this.BtnSendOneByOneMode);
-            this.tabPage2.Controls.Add(this.BtnConnect);
             this.tabPage2.Controls.Add(this.lbMsg);
             this.tabPage2.Controls.Add(this.keyText);
             this.tabPage2.Controls.Add(this.labelIP);
@@ -489,7 +495,6 @@
             this.tabPage2.Controls.Add(this.IpText);
             this.tabPage2.Controls.Add(this.DelayText);
             this.tabPage2.Controls.Add(this.label5);
-            this.tabPage2.Controls.Add(this.BtnDisconnect);
             this.tabPage2.Controls.Add(this.IntervalText);
             this.tabPage2.Controls.Add(this.BtnCopyKey);
             this.tabPage2.Controls.Add(this.label4);
@@ -505,8 +510,21 @@
             this.tabPage2.Text = "Config";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Font = new System.Drawing.Font("宋体", 10F);
+            this.label12.Location = new System.Drawing.Point(251, 98);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(98, 14);
+            this.label12.TabIndex = 38;
+            this.label12.Text = "Sound Volume:";
+            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SoundVolume
             // 
+            this.SoundVolume.BackColor = System.Drawing.SystemColors.ButtonHighlight;
             this.SoundVolume.Location = new System.Drawing.Point(254, 121);
             this.SoundVolume.Name = "SoundVolume";
             this.SoundVolume.Size = new System.Drawing.Size(171, 45);
@@ -532,7 +550,7 @@
             this.RepeatCountText.Margin = new System.Windows.Forms.Padding(2);
             this.RepeatCountText.MaxLength = 10;
             this.RepeatCountText.Name = "RepeatCountText";
-            this.RepeatCountText.Size = new System.Drawing.Size(68, 23);
+            this.RepeatCountText.Size = new System.Drawing.Size(90, 23);
             this.RepeatCountText.TabIndex = 33;
             this.RepeatCountText.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.BtnRepeatCount_KeyPress);
             // 
@@ -581,23 +599,25 @@
             this.BtnSendOneByOneMode.UseVisualStyleBackColor = true;
             this.BtnSendOneByOneMode.CheckedChanged += new System.EventHandler(this.BtnSendOneByOneMode_CheckedChanged);
             // 
-            // label12
+            // clearAllToolStripMenuItem
             // 
-            this.label12.AutoSize = true;
-            this.label12.Font = new System.Drawing.Font("宋体", 10F);
-            this.label12.Location = new System.Drawing.Point(251, 98);
-            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
-            this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(98, 14);
-            this.label12.TabIndex = 38;
-            this.label12.Text = "Sound Volume:";
-            this.label12.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            this.clearAllToolStripMenuItem.Name = "clearAllToolStripMenuItem";
+            this.clearAllToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.clearAllToolStripMenuItem.Text = "Clear All";
+            this.clearAllToolStripMenuItem.Click += new System.EventHandler(this.clearAllToolStripMenuItem_Click);
+            // 
+            // openNewParseLogWindowToolStripMenuItem
+            // 
+            this.openNewParseLogWindowToolStripMenuItem.Name = "openNewParseLogWindowToolStripMenuItem";
+            this.openNewParseLogWindowToolStripMenuItem.Size = new System.Drawing.Size(272, 22);
+            this.openNewParseLogWindowToolStripMenuItem.Text = "Open New Parse Log Window";
+            this.openNewParseLogWindowToolStripMenuItem.Click += new System.EventHandler(this.openNewParseLogWindowToolStripMenuItem_Click);
             // 
             // Main
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(473, 460);
+            this.ClientSize = new System.Drawing.Size(471, 460);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Status);
             this.Controls.Add(this.label2);
@@ -672,6 +692,8 @@
         private System.Windows.Forms.Label label10;
         private System.Windows.Forms.TrackBar SoundVolume;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem openNewParseLogWindowToolStripMenuItem;
     }
 }
 

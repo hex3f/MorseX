@@ -46,6 +46,7 @@ namespace MorseXClient
             this.LogWindowText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.LogWindowText.Size = new System.Drawing.Size(778, 428);
             this.LogWindowText.TabIndex = 11;
+            this.LogWindowText.TextChanged += new System.EventHandler(this.LogWindowText_TextChanged);
             // 
             // LogWindow
             // 

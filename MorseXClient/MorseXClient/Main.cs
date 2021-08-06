@@ -35,6 +35,7 @@ namespace MorseXClient
         private SendMode sendMode;
         public static List<LogWindow> MorseValueList;
         public static List<LogWindow> LogValueList;
+        public static List<LogWindow> ParseValueList;
 
         public Main()
         {
@@ -46,6 +47,7 @@ namespace MorseXClient
             check = new MessageUtil();
             MorseValueList = new List<LogWindow>();
             LogValueList = new List<LogWindow>();
+            ParseValueList = new List<LogWindow>();
             modem = new Modem(this);
             ipadr = IPAddress.Loopback;
             CheckForIllegalCrossThreadCalls = false;//设置该属性 为false
@@ -593,6 +595,10 @@ namespace MorseXClient
 
         private void SendText_KeyPress(object sender, KeyPressEventArgs e)
         {
+            if (e.KeyChar == (char)Keys.Enter)
+            {
+                SendMessage(SendText.Text, keyText.Text);
+            }
             if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键
         }
 
@@ -642,6 +648,22 @@ namespace MorseXClient
         private void SoundVolume_Scroll(object sender, EventArgs e)
         {
             SoundUtil.SetVolume(SoundVolume.Value);
+        }
+
+        private void clearAllToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ParseText.Text = "";
+            LogText.Text = "";
+            MorseText.Text = "";
+        }
+
+        private void openNewParseLogWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            LogWindow morseValue = new LogWindow();
+            ParseValueList.Add(morseValue);
+            morseValue.Show();
+            morseValue.Text = $"#{ParseValueList.Count} Parse Window";
+            morseValue.LogWindowText.Text = ParseText.Text;
         }
     }
 }
