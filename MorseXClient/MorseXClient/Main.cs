@@ -18,49 +18,75 @@ using System.Windows.Forms;
 
 namespace MorseXClient
 {
+    enum SendMode {
+        OneByOneMode,
+        RepeatMode,
+        AllMode,
+    }
     public partial class Main : Form
     {
+        private Thread SERVER_STATIS;
+        private Socket clientSocket = null;
+        private static bool isListen = true;
+        private Thread thDataFromServer;
+        private IPAddress ipadr;
+        private Modem modem;
+        private MessageUtil check;
+        private SendMode sendMode;
+        public static List<LogWindow> MorseValueList;
+        public static List<LogWindow> LogValueList;
+
         public Main()
         {
             InitializeComponent();
+            SoundUtil.SetVolume(5);
+            SoundVolume.Value = 5;
+            sendMode = SendMode.OneByOneMode;
+            BtnSendOneByOneMode.Checked = true;
+            check = new MessageUtil();
+            MorseValueList = new List<LogWindow>();
+            LogValueList = new List<LogWindow>();
             modem = new Modem(this);
             ipadr = IPAddress.Loopback;
             CheckForIllegalCrossThreadCalls = false;//设置该属性 为false
-            /*
-            多线程判断是否断开连接
-            */
+            //多线程判断是否断开连接
             SERVER_STATIS = new Thread(new ThreadStart(UpdateServerStatus));
             SERVER_STATIS.Start();
         }
-        Thread SERVER_STATIS;
-        Socket clientSocket = null;
-        static Boolean isListen = true;
-        Thread thDataFromServer;
-        IPAddress ipadr;
-        Modem modem;
-        MessageUtil check = new MessageUtil();
-        public static List<LogWindow> MorseValueList = new List<LogWindow>();
-        public static List<LogWindow> LogValueList = new List<LogWindow>();
 
         private void btnSend_Click(object sender, EventArgs e)
         {
-            SendMessage();
+            SendMessage(SendText.Text, keyText.Text);
         }
 
         /// <summary>
         /// 向服务端发送数据
         /// </summary>
-        private void SendMessage()
+        /// <param name="message">信息</param>
+        /// <param name="key">加密Key</param>
+        private void SendMessage(string message, string key)
         {
-            if (String.IsNullOrWhiteSpace(SendText.Text.Trim())) return;
-            if (clientSocket != null && clientSocket.Connected)
+            if (string.IsNullOrWhiteSpace(message.Trim())) return;
+            if (clientSocket != null && clientSocket.Connected && IsConnected(clientSocket))
             {
-                if (!check.CheckMessage(SendText.Text)) return;
-                /*string unMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(txtSendMsg.Text), key.Text);
-                Byte[] bytesSend = Encoding.UTF8.GetBytes(unMessage + "$");
-                clientSocket.Send(bytesSend);*/
-                Thread SendMorse = new Thread(new ThreadStart(SendMorseMessage));
-                SendMorse.Start();
+                if (!check.CheckMessage(message)) return;
+                switch (sendMode)
+                {
+                    case SendMode.OneByOneMode:
+                        Thread OneByOneModeThread = new Thread(delegate () { SendMorseMessage(message, key); });
+                        OneByOneModeThread.Start();
+                        break;
+                    case SendMode.RepeatMode:
+                        Thread RepeatModeThread = new Thread(delegate () { SendMorseMessageRepeat(message, key); });
+                        RepeatModeThread.Start();
+                        break;
+                    case SendMode.AllMode:
+                        string EncryptAllModeMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(message), key);
+                        SendMorse(EncryptAllModeMessage);
+                        break;
+                    default:
+                        break;
+                }
             }
             else
             {
@@ -69,25 +95,34 @@ namespace MorseXClient
             }
         }
 
-        private void SendMorseMessage() {
-            string _message = SendText.Text;
-            string _key = keyText.Text;
-            int _interval = IntervalText.Text != "" ? Convert.ToInt32(IntervalText.Text) < 1 ? 1 : Convert.ToInt32(IntervalText.Text) : 1;
+        private void SendMorseMessageRepeat(string message, string key) {
+            int _RepeatCountText = RepeatCountText.Text != "" ? Convert.ToInt32(RepeatCountText.Text) < 1 ? 1 : Convert.ToInt32(RepeatCountText.Text) : 1;
+            int _IntervalText = IntervalText.Text != "" ? Convert.ToInt32(IntervalText.Text) < 1 ? 1 : Convert.ToInt32(IntervalText.Text) : 1;
+            for (int i = 0; i < _RepeatCountText; i++)
+            {
+                SendMorseMessage(message, key);
+                Thread.Sleep(_IntervalText);
+            }
+        }
+
+        private void SendMorseMessage(string message, string key) {
+            string _message = message;
+            int _interval = DelayText.Text != "" ? Convert.ToInt32(DelayText.Text) < 1 ? 1 : Convert.ToInt32(DelayText.Text) : 1;
             SendText.Text = "";
             foreach (var morse in _message.ToCharArray())
             {
                 string MORSE = modem.ConvertToMorseCode(morse.ToString());
                 foreach (var symbol in MORSE.ToCharArray())
                 {
-                    string Encrypt_MORSE = Cryptography.Encrypt(symbol.ToString(), _key);
+                    string Encrypt_MORSE = Cryptography.Encrypt(symbol.ToString(), key);
                     SendMorse(Encrypt_MORSE);
                     Thread.Sleep(_interval);
                 }
-                string SPLIT = Cryptography.Encrypt(("[SPLIT]"), keyText.Text);
+                string SPLIT = Cryptography.Encrypt(("[SPLIT]"), key);
                 SendMorse(SPLIT);
             }
             Thread.Sleep(_interval);
-            string NEWLINE = Cryptography.Encrypt(("[NEWLINE]"), keyText.Text);
+            string NEWLINE = Cryptography.Encrypt(("[NEWLINE]"), key);
             SendMorse(NEWLINE);
         }
 
@@ -97,48 +132,56 @@ namespace MorseXClient
         private void UpdateServerStatus() {
             while (true)
             {
-                if (clientSocket != null && /*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead) && clientSocket.Connected)
+                if (clientSocket != null && IsConnected(clientSocket) &&/*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead) && clientSocket.Connected)
                 {
                     isRotaryConnectOK = true;
                     Status.Invalidate();
                 }
                 else if(clientSocket != null)
                 {
-                    isRotaryConnectOK = false;
-                    Status.Invalidate();
                     Disconnect();
                 }
                 Thread.Sleep(1000); 
             }
         }
 
-        #region 采用Socket方式，测试服务器连接
         /// <summary>
-        /// 采用Socket方式，测试服务器连接
+        /// 检查一个Socket是否可连接
         /// </summary>
-        /// <param name="host">服务器主机名或IP</param>
-        /// <param name="port">端口号</param>
-        /// <param name="millisecondsTimeout">等待时间：毫秒</param>
+        /// <param name="socket"></param>
         /// <returns></returns>
-        public static bool TestConnection(string host, int port, int millisecondsTimeout)
+        private bool IsConnected(Socket socket)
         {
-            TcpClient client = new TcpClient();
+            if (socket == null || socket.Connected == false)
+            {
+                return false;
+            }
+
+            bool blockingState = socket.Blocking;
             try
             {
-                var ar = client.BeginConnect(host, port, null, null);
-                ar.AsyncWaitHandle.WaitOne(millisecondsTimeout);
-                return client.Connected;
+                byte[] tmp = new byte[1];
+                socket.Blocking = false;
+                socket.Send(tmp, 0, 0);
+                return true;
             }
-            catch (Exception e)
+            catch (SocketException e)
             {
-                throw e;
+                // 产生 10035 == WSAEWOULDBLOCK 错误，说明被阻止了，但是还是连接的
+                if (e.NativeErrorCode.Equals(10035))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
             }
             finally
             {
-                client.Close();
+                socket.Blocking = blockingState;    // 恢复状态
             }
         }
-        #endregion
 
         //每一个连接的客户端必须设置一个唯一的用户名，在服务器端是把用户名和套接字保存在Dictionary<userName,ClientSocket>中
         private void btnConnect_Click(object sender, EventArgs e)
@@ -163,7 +206,7 @@ namespace MorseXClient
                      * object state     一个用户定义对象，其中包含连接操作的相关信息。 当操作完成时，此对象会被传递给 requestCallback 委托
                      */
                     //如果txtIP里面有值，就选择填入的IP作为服务器IP，不填的话就默认是本机的
-                    if (!String.IsNullOrWhiteSpace(IpText.Text.ToString().Trim()))
+                    if (!string.IsNullOrWhiteSpace(IpText.Text.ToString().Trim()))
                     {
                         try
                         {
@@ -513,7 +556,6 @@ namespace MorseXClient
                     e.KeyChar = (char)0;   //处理非法字符
                 }
             }
-
         }
 
         private void IpText_KeyPress(object sender, KeyPressEventArgs e)
@@ -563,6 +605,43 @@ namespace MorseXClient
         private void clearParseLogToolStripMenuItem_Click(object sender, EventArgs e)
         {
             ParseText.Text = "";
+        }
+
+        private void BtnSendOneByOneMode_CheckedChanged(object sender, EventArgs e)
+        {
+            sendMode = SendMode.OneByOneMode;
+        }
+
+        private void BtnSendRepeatMode_CheckedChanged(object sender, EventArgs e)
+        {
+            sendMode = SendMode.RepeatMode;
+        }
+
+        private void BtnSendAllMode_CheckedChanged(object sender, EventArgs e)
+        {
+            sendMode = SendMode.AllMode;
+        }
+
+        private void BtnRepeatCount_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar == 0x20) e.KeyChar = (char)0;  //禁止空格键
+            if ((e.KeyChar == 0x2D) && (((TextBox)sender).Text.Length == 0)) return;   //处理负数
+            if (e.KeyChar > 0x20)
+            {
+                try
+                {
+                    double.Parse(((TextBox)sender).Text + e.KeyChar.ToString());
+                }
+                catch
+                {
+                    e.KeyChar = (char)0;   //处理非法字符
+                }
+            }
+        }
+
+        private void SoundVolume_Scroll(object sender, EventArgs e)
+        {
+            SoundUtil.SetVolume(SoundVolume.Value);
         }
     }
 }

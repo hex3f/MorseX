@@ -75,6 +75,7 @@
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SignalCodesEnum.cs" />
+    <Compile Include="SoundUtil.cs" />
     <Compile Include="Util.cs" />
     <EmbeddedResource Include="MorseTranslator.resx">
       <DependentUpon>MorseTranslator.cs</DependentUpon>

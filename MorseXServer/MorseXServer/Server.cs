@@ -29,7 +29,6 @@ namespace MorseXServer
             {
                 LocalIpList.Text += ipAddr.ToString() + Environment.NewLine;
             }
-            //ipadr = IPAddress.Parse("121.37.138.30");
         }
 
         //保存多个客户端的通信套接字
@@ -37,14 +36,13 @@ namespace MorseXServer
         //申明一个监听套接字 
         Socket serverSocket = null;
         //设置一个监听标记
-        Boolean isListen = true;
+        bool isListen = true;
         //开启监听的线程
         Thread thStartListen;
         //默认一个主机监听的IP
         IPAddress ipadr;
         //将endpoint设置为成员字段
         IPEndPoint endPoint;
-
 
         private void btnStart_Click(object sender, EventArgs e)
         {
@@ -92,7 +90,6 @@ namespace MorseXServer
                     //但是这里的bind不是上面的bind，是.NET里面的一个bind，使 Socket 与一个本地终结点相关联。 命名空间:System.Net.Sockets  程序集:System（在 system.dll 中）
                     //给套接字绑定一个端点，其实差不多用上面的那种bind也能实现
                     //参考网站： https://msdn.microsoft.com/zh-cn/library/system.net.sockets.socket.bind(VS.80).aspx
-                    //10.127.221.248
                     try
                     {
                         serverSocket.Bind(endPoint);
@@ -117,7 +114,7 @@ namespace MorseXServer
                         **/
                         MessageText.BeginInvoke(new Action(() =>
                         {
-                            MessageText.Text += "Service started successfully... - " + DateTime.Now + "\r\n";
+                            MessageText.Text += "Service started successfully... - " + DateTime.Now + Environment.NewLine;
                         }));
                     }
                     catch (Exception eg)
@@ -125,9 +122,8 @@ namespace MorseXServer
                         MessageBox.Show("Invalid IP address entered" + eg.ToString());
                         MessageText.BeginInvoke(new Action(() =>
                         {
-                            MessageText.Text += "Service failed to start...\r\n";
+                            MessageText.Text += "Service failed to start..." + Environment.NewLine;
                         }));
-
 
                         if (serverSocket != null)
                         {
@@ -143,11 +139,8 @@ namespace MorseXServer
 
                             serverSocket = null;
                             isListen = false;
-                           
                         }
                     }
-
-
                 }
                 catch(SocketException ex)
                 {
@@ -156,8 +149,6 @@ namespace MorseXServer
             }
 
         }
-
-
 
         //线程函数，封装一个建立连接的通信套接字
         private  void StartListen()
@@ -184,12 +175,12 @@ namespace MorseXServer
                 }
                 catch (SocketException e)
                 {
-                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString() + "\r\nStartListen\r\n" + DateTime.Now.ToString() + "\r\n");
+                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString() + Environment.NewLine + "StartListen" + Environment.NewLine + DateTime.Now.ToString() + Environment.NewLine);
                 }
 
                 //TCP是面向字节流的
-                Byte[] bytesFrom = new Byte[4096];
-                String dataFromClient = null;
+                byte[] bytesFrom = new byte[4096];
+                string dataFromClient = null;
 
                 if (clientSocket != null && clientSocket.Connected)
                 {
@@ -202,13 +193,13 @@ namespace MorseXServer
                         //size    要接收的字节数
                         //socketFlags  socketFlages值的按位组合
 
-                        Int32 len = clientSocket.Receive(bytesFrom);    //获取客户端发来的信息,返回的就是收到的字节数,并且把收到的信息都放在bytesForm里面
+                        int len = clientSocket.Receive(bytesFrom);    //获取客户端发来的信息,返回的就是收到的字节数,并且把收到的信息都放在bytesForm里面
 
                         if (len > -1)
                         {
-                            String tmp = Encoding.UTF8.GetString(bytesFrom, 0, len);  //将字节流转换成字符串
+                            string tmp = Encoding.UTF8.GetString(bytesFrom, 0, len);  //将字节流转换成字符串
                             dataFromClient = tmp;
-                            Int32 sublen = dataFromClient.LastIndexOf("$");
+                            int sublen = dataFromClient.LastIndexOf("$");
                             if (sublen > -1)
                             {
                                 dataFromClient = dataFromClient.Substring(0, sublen);   //获取用户名
@@ -220,15 +211,12 @@ namespace MorseXServer
                                     //用户加入聊天
                                     //BroadCast是下面自己定义的一个类，是用来将消息对所有用户进行推送的
                                     BroadCast.PushMessage("Warning:" + dataFromClient + " Joined", dataFromClient, false, clientList);
-
                                     //HandleClient也是一个自己定义的类，用来负责接收客户端发来的消息并转发给所有的客户端
                                     HandleClient client = new HandleClient(MessageText, LogText);
-
                                     client.StartClient(clientSocket, dataFromClient, clientList);
-
                                     MessageText.BeginInvoke(new Action(() =>
                                     {
-                                        MessageText.Text += dataFromClient + " Connected to the server - " + DateTime.Now + "\r\n";
+                                        MessageText.Text += dataFromClient + " Connected to the server - " + DateTime.Now + Environment.NewLine;
                                     }));
                                 }
                                 else
@@ -241,7 +229,7 @@ namespace MorseXServer
                     }
                     catch (Exception ep)
                     {
-                        File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", ep.ToString() + "\r\n\t\t" + DateTime.Now.ToString() + "\r\n");
+                        File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", ep.ToString() + Environment.NewLine + "\t\t" + DateTime.Now.ToString() + Environment.NewLine);
                     }
                 }
             }
@@ -253,7 +241,7 @@ namespace MorseXServer
             if (serverSocket != null)
             {
                 serverSocket.Close();
-                thStartListen.Abort();  //将监听进程关掉
+                thStartListen.Abort();//将监听进程关掉
                 
                 BroadCast.PushMessage("Warning:Server has closed", "", false, clientList);
                 foreach (var socket in clientList.Values)
@@ -264,7 +252,7 @@ namespace MorseXServer
                 
                 serverSocket = null;
                 isListen = false;
-                MessageText.Text += "Server shutdown. Close all client connect \t"+DateTime.Now.ToString()+"\r\n";
+                MessageText.Text += "Server shutdown. Close all client connect \t" + DateTime.Now.ToString() + Environment.NewLine;
             }
         }
 
@@ -290,7 +278,7 @@ namespace MorseXServer
             //    thStartListen.Start();
             //    txtMsg.BeginInvoke(new Action(() =>
             //    {
-            //        txtMsg.Text += "服务启动成功...\r\n";
+            //        txtMsg.Text += "服务启动成功..." + Environment.NewLine;
             //    }
             //    ));
             //    labIPnow.BeginInvoke(new Action(() =>
@@ -317,7 +305,7 @@ namespace MorseXServer
                 serverSocket.Close();
                 serverSocket = null;
                 isListen = false;
-                MessageText.Text += "Server stop\r\n";
+                MessageText.Text += "Server stop" + Environment.NewLine;
             }
 
         }
@@ -327,7 +315,7 @@ namespace MorseXServer
         {
             
                 //如果txtIP里面有值，就选择填入的IP作为服务器IP，不填的话就默认是本机的
-                if (!String.IsNullOrWhiteSpace(IpText.Text.ToString().Trim()))
+                if (!string.IsNullOrWhiteSpace(IpText.Text.ToString().Trim()))
                 {
                     try
                     {
@@ -335,7 +323,7 @@ namespace MorseXServer
                         btnStop_Click(sender, e);
                         MessageText.BeginInvoke(new Action(() =>
                         {
-                            MessageText.Text += "Server is restarting, please wait...\r\n";
+                            MessageText.Text += "Server is restarting, please wait..." + Environment.NewLine;
                         }));
 
                         btnStart_Click(sender, e);
@@ -371,7 +359,7 @@ namespace MorseXServer
                 btnStop_Click(sender, e);
                 MessageText.BeginInvoke(new Action(() =>
                 {
-                    MessageText.Text += "Server is restarting, please wait...\r\n";
+                    MessageText.Text += "Server is restarting, please wait..." + Environment.NewLine;
                 }));
                 btnStart_Click(sender, e);
                 labIPnow.BeginInvoke(new Action(() =>
@@ -431,8 +419,8 @@ namespace MorseXServer
     public class HandleClient
     {
         Socket clientSocket;
-        String clNo;
-        Dictionary<String, Socket> clientList = new Dictionary<string, Socket>();
+        string clNo;
+        Dictionary<string, Socket> clientList = new Dictionary<string, Socket>();
         TextBox txtMsg;
         TextBox logMsg;
         public HandleClient() { }
@@ -443,7 +431,7 @@ namespace MorseXServer
         }
 
         
-        public void StartClient(Socket inClientSocket, String clientNo, Dictionary<String, Socket> cList)
+        public void StartClient(Socket inClientSocket, string clientNo, Dictionary<string, Socket> cList)
         {
             clientSocket = inClientSocket;
             clNo = clientNo;
@@ -456,11 +444,11 @@ namespace MorseXServer
 
         private void Chat()
         {
-            Byte[] bytesFromClient = new Byte[4096];
-            String dataFromClient;
-            String msgTemp = null;
-            Byte[] bytesSend = new Byte[4096];
-            Boolean isListen = true;
+            byte[] bytesFromClient = new byte[4096];
+            string dataFromClient;
+            string msgTemp = null;
+            byte[] bytesSend = new byte[4096];
+            bool isListen = true;
 
             while (isListen)
             {
@@ -472,23 +460,24 @@ namespace MorseXServer
                     }
                     if (clientSocket.Available > 0)
                     {
-                        Int32 len = clientSocket.Receive(bytesFromClient);
+                        int len = clientSocket.Receive(bytesFromClient);
                         if (len > -1)
                         {
                             dataFromClient = Encoding.UTF8.GetString(bytesFromClient, 0, len);
-                            if (!String.IsNullOrWhiteSpace(dataFromClient))
+                            if (!string.IsNullOrWhiteSpace(dataFromClient))
                             {
                                 dataFromClient = dataFromClient.Substring(0, dataFromClient.LastIndexOf("$"));   //这里的dataFromClient是消息内容，上面的是用户名
                                 logMsg.BeginInvoke(new Action(() =>
                                 {
-                                    logMsg.Text += dataFromClient + DateTime.Now + "\r\n";
+                                    if (string.IsNullOrEmpty(dataFromClient)) return;
+                                    logMsg.Text += dataFromClient + DateTime.Now + Environment.NewLine;
                                 }));
-                                if (!String.IsNullOrWhiteSpace(dataFromClient))
+                                if (!string.IsNullOrWhiteSpace(dataFromClient))
                                 {
                                     BroadCast.PushMessage(dataFromClient, clNo, true, clientList);
                                     msgTemp = clNo + ":" + dataFromClient + "\t\t" + DateTime.Now.ToString();
-                                    String newMsg = msgTemp;
-                                    File.AppendAllText(Environment.CurrentDirectory + "\\MessageRecords.txt", newMsg + "\r\n", Encoding.UTF8);
+                                    string newMsg = msgTemp;
+                                    File.AppendAllText(Environment.CurrentDirectory + "\\MessageRecords.txt", newMsg + Environment.NewLine, Encoding.UTF8);
                                 }
                                 else
                                 {
@@ -496,7 +485,7 @@ namespace MorseXServer
                                     clientList.Remove(clNo);
                                     txtMsg.BeginInvoke(new Action(() =>
                                     {
-                                        txtMsg.Text += clNo+ "Disconnected from the server\r" + DateTime.Now + "\r\n";
+                                        txtMsg.Text += clNo+ "Disconnected from the server\r" + DateTime.Now + Environment.NewLine;
                                     }));
                                     BroadCast.PushMessage("Warning:" + clNo + "Offline\r", "",false,clientList);
                                     clientSocket.Close();
@@ -515,7 +504,7 @@ namespace MorseXServer
                     
                     clientSocket.Close();
                     clientSocket = null;
-                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString()+"\r\nChat\r\n"+DateTime.Now.ToString()+"\r\n");
+                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString()+ Environment.NewLine + "Chat" + Environment.NewLine + DateTime.Now.ToString() + Environment.NewLine);
                 }
             }
         }
@@ -537,7 +526,7 @@ namespace MorseXServer
         }
 
         //flag是用来判断传进来的msg前面是否需要加上uName:，也就是判断是不是系统信息，是系统信息的话就设置flag为false
-        public static void PushMessage(String msg, String uName, Boolean flag, Dictionary<String, Socket> clientList)
+        public static void PushMessage(string msg, string uName, bool flag, Dictionary<string, Socket> clientList)
         {
             if (!IsNumAndEnCh(msg))
             {
@@ -549,7 +538,7 @@ namespace MorseXServer
             foreach (var item in clientList)
             {
                 Socket brdcastSocket = (Socket)item.Value;
-                String msgTemp = null;
+                string msgTemp = null;
                 Byte[] castBytes = new Byte[4096];
                 if (flag == true)
                 {
@@ -569,7 +558,7 @@ namespace MorseXServer
                 {
                     brdcastSocket.Close();
                     brdcastSocket = null;
-                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString()+"\r\nPushMessage\r\n"+DateTime.Now.ToString()+"\r\n");
+                    File.AppendAllText(Environment.CurrentDirectory + "\\Exception.txt", e.ToString() + Environment.NewLine + "PushMessage" + Environment.NewLine + DateTime.Now.ToString() + Environment.NewLine);
                     continue;
                 }
             }

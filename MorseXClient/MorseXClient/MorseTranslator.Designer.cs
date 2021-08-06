@@ -48,7 +48,7 @@
             // 
             // InputText
             // 
-            this.InputText.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
+            this.InputText.Font = new System.Drawing.Font("黑体", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
             this.InputText.Location = new System.Drawing.Point(11, 11);
             this.InputText.Margin = new System.Windows.Forms.Padding(2);
             this.InputText.Multiline = true;
@@ -63,7 +63,7 @@
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(75, 41);
             this.button1.TabIndex = 13;
-            this.button1.Text = "To Text";
+            this.button1.Text = "Translate";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
