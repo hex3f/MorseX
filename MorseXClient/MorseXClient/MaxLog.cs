@@ -35,7 +35,7 @@ namespace MorseXClient
                     Main.MorseValueList.Remove(this);
                     break;
                 case WindowType.Parse:
-                    //Main.MorseValueList.Remove(this);
+                    Main.ParseValueList.Remove(this);
                     break;
                 default:
                     break;

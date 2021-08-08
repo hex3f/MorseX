@@ -39,7 +39,6 @@
             this.BtnDisconnect = new System.Windows.Forms.Button();
             this.MorseText = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.BtnCopyKey = new System.Windows.Forms.Button();
             this.Status = new System.Windows.Forms.Label();
             this.BtnPasteKey = new System.Windows.Forms.Button();
@@ -67,6 +66,7 @@
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.label9 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.label2 = new System.Windows.Forms.Label();
             this.label12 = new System.Windows.Forms.Label();
             this.SoundVolume = new System.Windows.Forms.TrackBar();
             this.label10 = new System.Windows.Forms.Label();
@@ -214,21 +214,12 @@
             this.label1.TabIndex = 11;
             this.label1.Text = "Message";
             // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(364, 437);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(77, 12);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "by hex3f.com";
-            // 
             // BtnCopyKey
             // 
-            this.BtnCopyKey.Location = new System.Drawing.Point(210, 24);
+            this.BtnCopyKey.Location = new System.Drawing.Point(210, 23);
             this.BtnCopyKey.Margin = new System.Windows.Forms.Padding(2);
             this.BtnCopyKey.Name = "BtnCopyKey";
-            this.BtnCopyKey.Size = new System.Drawing.Size(52, 24);
+            this.BtnCopyKey.Size = new System.Drawing.Size(52, 25);
             this.BtnCopyKey.TabIndex = 14;
             this.BtnCopyKey.Text = "COPY";
             this.BtnCopyKey.UseVisualStyleBackColor = true;
@@ -238,7 +229,7 @@
             // 
             this.Status.AutoSize = true;
             this.Status.Font = new System.Drawing.Font("黑体", 10.5F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(134)));
-            this.Status.Location = new System.Drawing.Point(8, 435);
+            this.Status.Location = new System.Drawing.Point(9, 437);
             this.Status.Name = "Status";
             this.Status.Size = new System.Drawing.Size(77, 14);
             this.Status.TabIndex = 15;
@@ -250,7 +241,7 @@
             this.BtnPasteKey.Location = new System.Drawing.Point(210, 51);
             this.BtnPasteKey.Margin = new System.Windows.Forms.Padding(2);
             this.BtnPasteKey.Name = "BtnPasteKey";
-            this.BtnPasteKey.Size = new System.Drawing.Size(52, 24);
+            this.BtnPasteKey.Size = new System.Drawing.Size(52, 27);
             this.BtnPasteKey.TabIndex = 16;
             this.BtnPasteKey.Text = "PASTE";
             this.BtnPasteKey.UseVisualStyleBackColor = true;
@@ -417,6 +408,7 @@
             this.ParseText.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
             this.ParseText.Size = new System.Drawing.Size(432, 47);
             this.ParseText.TabIndex = 26;
+            this.ParseText.TextChanged += new System.EventHandler(this.ParseText_TextChanged);
             // 
             // label7
             // 
@@ -494,6 +486,7 @@
             // 
             // tabPage2
             // 
+            this.tabPage2.Controls.Add(this.label2);
             this.tabPage2.Controls.Add(this.label12);
             this.tabPage2.Controls.Add(this.SoundVolume);
             this.tabPage2.Controls.Add(this.label10);
@@ -523,6 +516,15 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Config";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(281, 363);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(155, 12);
+            this.label2.TabIndex = 39;
+            this.label2.Text = "By Hex3f - Blog hex3f.com";
             // 
             // label12
             // 
@@ -620,7 +622,6 @@
             this.ClientSize = new System.Drawing.Size(471, 460);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.Status);
-            this.Controls.Add(this.label2);
             this.Controls.Add(this.Menu);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
             this.MainMenuStrip = this.Menu;
@@ -657,7 +658,6 @@
         private System.Windows.Forms.TextBox IpText;
         private System.Windows.Forms.Button BtnDisconnect;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Button BtnCopyKey;
         private System.Windows.Forms.Label Status;
         private System.Windows.Forms.Button BtnPasteKey;
@@ -694,6 +694,7 @@
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ToolStripMenuItem clearAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openNewParseLogWindowToolStripMenuItem;
+        private System.Windows.Forms.Label label2;
     }
 }
 

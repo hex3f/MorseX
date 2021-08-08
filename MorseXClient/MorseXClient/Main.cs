@@ -59,6 +59,7 @@ namespace MorseXClient
         private void btnSend_Click(object sender, EventArgs e)
         {
             SendMessage(SendText.Text, keyText.Text);
+            SendText.Text = "";
         }
 
         /// <summary>
@@ -85,7 +86,7 @@ namespace MorseXClient
                             RepeatModeThread.Start();
                             break;
                         case SendMode.AllMode:
-                            string EncryptAllModeMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(message), key);
+                            string EncryptAllModeMessage = Cryptography.Encrypt(modem.ConvertToMorseCode(message) + " ", key);
                             SendMorse(EncryptAllModeMessage);
                             break;
                         default:
@@ -101,6 +102,7 @@ namespace MorseXClient
             catch (Exception)
             {
                 Disconnect();
+                throw;
             }
         }
 
@@ -117,7 +119,6 @@ namespace MorseXClient
         private void SendMorseMessage(string message, string key) {
             string _message = message;
             int _interval = DelayText.Text != "" ? Convert.ToInt32(DelayText.Text) < 1 ? 1 : Convert.ToInt32(DelayText.Text) : 1;
-            SendText.Text = "";
             foreach (var morse in _message.ToCharArray())
             {
                 string MORSE = modem.ConvertToMorseCode(morse.ToString());
@@ -141,17 +142,12 @@ namespace MorseXClient
         private void UpdateServerStatus() {
             while (true)
             {
-                Socket socketTest = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-                int port = PortText.Text != "" ? Convert.ToInt32(PortText.Text) : 45454;
-                IPAddress addr = IPAddress.Parse(ipadr.ToString());
-                IPEndPoint endp = new IPEndPoint(addr, port);
-                //socketTest.Bind(endp);
                 if (clientSocket != null && IsConnected(clientSocket) &&/*!TestConnection(ipadr.ToString(), port, 5) && clientSocket.Available == 0 &&*/ !clientSocket.Poll(1000, SelectMode.SelectRead))
                 {
                     isRotaryConnectOK = true;
                     Status.Invalidate();
                 }
-                else if (clientSocket != null)
+                else if (clientSocket != null && clientSocket.Poll(1000, SelectMode.SelectRead))
                 {
                     Disconnect();
                 }
@@ -376,7 +372,8 @@ namespace MorseXClient
                         }
                         else
                         {
-                            ShowMsg(Cryptography.Decrypt(dataFromClient, Cryptography.SENDSERVERKEY));
+                            string serverMessage = Cryptography.Decrypt(dataFromClient, Cryptography.SENDSERVERKEY);
+                            ShowMsg(serverMessage);
                         }
                     }
                 }
@@ -518,7 +515,7 @@ namespace MorseXClient
             LogText.SelectionStart = LogText.TextLength;
             //将控件内容滚动到当前插入符号位置
             LogText.ScrollToCaret();
-            foreach (var item in MorseValueList)
+            foreach (var item in LogValueList)
             {
                 item.LogWindowText.Text = LogText.Text;
             }
@@ -683,6 +680,18 @@ namespace MorseXClient
             morseValue.Show();
             morseValue.Text = $"#{ParseValueList.Count} Parse Window";
             morseValue.LogWindowText.Text = ParseText.Text;
+        }
+
+        private void ParseText_TextChanged(object sender, EventArgs e)
+        {
+            //文本框选中的起始点在最后
+            ParseText.SelectionStart = ParseText.TextLength;
+            //将控件内容滚动到当前插入符号位置
+            ParseText.ScrollToCaret();
+            foreach (var item in ParseValueList)
+            {
+                item.LogWindowText.Text = ParseText.Text;
+            }
         }
     }
 }

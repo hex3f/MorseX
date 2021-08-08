@@ -3,6 +3,7 @@
     using MorseXClient;
     using System;
     using System.Collections.Generic;
+    using System.IO;
     using System.Linq;
     using System.Media;
     using System.Runtime.InteropServices;
@@ -83,12 +84,28 @@
 
         public void PlayDash()
         {
-            dashSound.Play();
+            if (File.Exists(FileUtil.DashSoundPath))
+            {
+                dashSound.Play();
+            }
+            else
+            {
+                FileUtil.ExtractResFile("MorseXClient.Sound.dash.wav", FileUtil.DashSoundPath);
+                dashSound.Play();
+            }
         }
 
         public void PlayDot()
         {
-            dotSound.Play();
+            if (File.Exists(FileUtil.DotSoundPath))
+            {
+                dashSound.Play();
+            }
+            else
+            {
+                FileUtil.ExtractResFile("MorseXClient.Sound.dot.wav", FileUtil.DotSoundPath);
+                dotSound.Play();
+            }
         }
 
         public void PlayMorseTone(string morseStringOrSentence)
@@ -102,14 +119,18 @@
             }
             if (morseStringOrSentence == "[DOT]")
             {
-                dotSound.Play();
+                //dotSound.Play();
+                Thread dot = new Thread(new ThreadStart(PlayDot));
+                dot.Start();
                 morseValue.Text += ".";
                 ParseMorseStr += ".";
                 return;
             }
             if (morseStringOrSentence == "[DASH]")
             {
-                dashSound.Play();
+                //dashSound.Play();
+                Thread dash = new Thread(new ThreadStart(PlayDash));
+                dash.Start();
                 morseValue.Text += "-";
                 ParseMorseStr += "-";
                 return;
@@ -156,7 +177,6 @@
                             dashTask.Wait();
                             break;
                         case '_':
-
                             morseValue.Text += "/";
                             Thread.Sleep(TimeUnitInMilliSeconds);
                             string morse = MorseCodeTranslator.DecodeMorse(ParseMorseStr);

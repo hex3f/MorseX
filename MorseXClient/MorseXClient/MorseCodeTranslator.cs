@@ -103,7 +103,7 @@ namespace MorseXClient
             {
                 if (translator.ContainsKey(character))
                 {
-                    sb.Append(translator[character] + " ");
+                    sb.Append(translator[character] + "/");
                 }
                 else if (character == ' ')
                 {
