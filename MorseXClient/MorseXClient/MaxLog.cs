@@ -15,6 +15,7 @@ namespace MorseXClient
         Morse,
         Parse,
     }
+
     public partial class LogWindow : Form
     {
         WindowType type;

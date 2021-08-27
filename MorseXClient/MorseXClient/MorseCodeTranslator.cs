@@ -4,8 +4,13 @@ using System.Linq;
 
 namespace MorseXClient
 {
+    /// <summary>
+    /// 摩斯电码翻译 - 翻译表在这里
+    /// </summary>
     public static class MorseCodeTranslator
     {
+
+        //摩斯电码翻译表
         private static Dictionary<char, string> translator = new Dictionary<char, string>
         {
             // Characters
@@ -174,7 +179,6 @@ namespace MorseXClient
             { "..--.-","_"},
             { ".-..-.","\"" }, // Quotaion mark
             { "...-..-","$" }, // Plus
-            //{ "....","&" }, // multiplication
             { ".--.-.","@" }, // At the rate of
 
             // Brackets
@@ -182,12 +186,22 @@ namespace MorseXClient
             { "-.--.-",")" }, // right bracket 
         };
 
+        /// <summary>
+        /// 摩斯电码格式化
+        /// </summary>
+        /// <param name="morse">摩斯电码</param>
+        /// <returns></returns>
         private static string[] MorseRuleUpdate(string morse)
         {
             if (string.IsNullOrEmpty(morse)) return null;
             return morse.Trim().Replace(Environment.NewLine,"").Split('/');
         }
 
+        /// <summary>
+        /// 解码摩斯电码
+        /// </summary>
+        /// <param name="morse">摩斯电码</param>
+        /// <returns></returns>
         public static string DecodeMorse(string morse) {
             string[] morseArray = MorseRuleUpdate(morse);
             if (morseArray == null) return null;

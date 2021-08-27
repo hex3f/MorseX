@@ -1,19 +1,13 @@
 ﻿using MorseCode;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Diagnostics;
 using System.Drawing;
-using System.Linq;
 using System.Net;
 using System.Net.Sockets;
-using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace MorseXClient
@@ -116,6 +110,11 @@ namespace MorseXClient
             }
         }
 
+        /// <summary>
+        /// 发送摩斯电码信息
+        /// </summary>
+        /// <param name="message">信息</param>
+        /// <param name="key">密钥</param>
         private void SendMorseMessage(string message, string key) {
             string _message = message;
             int _interval = DelayText.Text != "" ? Convert.ToInt32(DelayText.Text) < 1 ? 1 : Convert.ToInt32(DelayText.Text) : 1;
@@ -193,7 +192,6 @@ namespace MorseXClient
             }
         }
 
-        //每一个连接的客户端必须设置一个唯一的用户名，在服务器端是把用户名和套接字保存在Dictionary<userName,ClientSocket>中
         private void btnConnect_Click(object sender, EventArgs e)
         {
             if (clientSocket == null || !clientSocket.Connected) {
@@ -285,7 +283,11 @@ namespace MorseXClient
             }
         }
 
-        private void ShowMsg(String msg, bool selfMessage = false)
+        /// <summary>
+        /// 显示信息在面板
+        /// </summary>
+        /// <param name="msg">信息</param>
+        private void ShowMsg(string msg)
         {
             LogText.BeginInvoke(new Action(() =>
             {
@@ -298,12 +300,7 @@ namespace MorseXClient
                 {
                     string DecryptMessage = Cryptography.Decrypt(item, keyText.Text);
                     modem.PlayMorseTone(DecryptMessage);
-                    //MorseValue.Text += DecryptMessage;
-                    //Thread morse = new Thread(delegate () { modem.PlayMorseTone(DecryptMessage); });
-                    //morse.Start();
                 }
-                //modem.PlayMorseTone(msg, key.Text);
-                //MorseValue.Text += Cryptography.Decrypt(msg, key.Text);
                 LogText.Text += Environment.NewLine + msg;    // 在 Windows 环境中，C# 语言 Environment.NewLine == "\r\n" 结果为 true
             }));
         }
@@ -465,7 +462,9 @@ namespace MorseXClient
             }
         }
 
-        /* 手动发报 */
+        /// <summary>
+        /// 手动发报 通过按键检测
+        /// </summary>
         private bool keyStatus = false;
         private void txtSendMsg_KeyDown(object sender, KeyEventArgs e)
         {

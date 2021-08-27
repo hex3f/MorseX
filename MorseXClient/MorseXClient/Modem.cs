@@ -23,6 +23,7 @@
         Codes codeStore;
         TextBox morseValue;
         TextBox parseText;
+
         public Modem(Main _main)
         {
             codeStore = new Codes();
@@ -37,6 +38,7 @@
             codeStore = new Codes();
         }
 
+        /// <returns></returns>
         public string ConvertToMorseCode(string sentence, bool addStartAndEndSignal = false)
         {
             var generatedCodeList = new List<string>();
@@ -108,6 +110,10 @@
             }
         }
 
+        /// <summary>
+        /// 播放摩斯电码
+        /// </summary>
+        /// <param name="morseStringOrSentence"></param>
         public void PlayMorseTone(string morseStringOrSentence)
         {
             if (morseStringOrSentence == "ERROR DATA") {
@@ -186,7 +192,6 @@
                             break;
                     }
                 }
-                //Thread.Sleep(100);
             }
             else
             {
@@ -194,6 +199,11 @@
             }
         }
 
+        /// <summary>
+        /// 判断是否是摩斯电码
+        /// </summary>
+        /// <param name="sentence"></param>
+        /// <returns></returns>
         private bool IsValidMorse(string sentence)
         {
             var countDot = sentence.Count(x => x == '.');
